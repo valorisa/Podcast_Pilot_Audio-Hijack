@@ -1,0 +1,27 @@
+# PodcastPilot — exemple de config pour `podcastpilot watch`
+# Copier vers ~/.ppilot.toml et personnaliser.
+
+# Dossier surveillé (sortie d'Audio Hijack)
+source_dir = "~/Music/Audio Hijack"
+
+# Dossier de destination après traitement
+output_dir = "~/Podcasts/Ready"
+
+# Glob des fichiers à traiter
+pattern = "*.m4a"
+
+# Template de nom final. Variables disponibles :
+#   {show}, {episode}, {title}, {date}
+template = "{show}/EP{episode}_{title}.m4a"
+
+# Cible de loudness en LUFS. Standard podcast : -16.
+loudness_target = -16.0
+
+# Si true, embed des tags MP4/ID3 via AVFoundation.
+embed_metadata = true
+
+# Artiste par défaut (si non déductible du nom de fichier)
+artist = ""
+
+# Copyright par défaut
+copyright = "© 2026 PodcastPilot user"

@@ -1,0 +1,37 @@
+# Swift / SPM
+.build/
+.swiftpm/
+Packages/
+*.xcodeproj/
+*.xcworkspace/
+Package.resolved
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Build artefacts
+*.dSYM/
+*.pkg
+*.dmg
+dist/
+staging_*/
+
+# Secrets / config utilisateur
+**/config.toml
+**/*.p12
+**/*.key
+**/DeveloperID*
+.env
+.env.*
+
+# Logs
+*.log
+signing_*.log
