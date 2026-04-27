@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  release:
+    name: Build → Sign → Notarize → Publish
+    runs-on: macos-14
+    timeout-minutes: 30
+    env:
+      BINARY: podcastpilot
+      BUNDLE_ID: io.github.valorisa.podcastpilot
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import Developer ID certificates
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.DEV_ID_CERT_P12_BASE64 }}
+          p12-password: ${{ secrets.DEV_ID_CERT_PASSWORD }}
+          keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+
+      - name: Sign and notarize
+        env:
+          DEVELOPER_ID_APP: ${{ secrets.DEVELOPER_ID_APP }}
+          DEVELOPER_ID_INSTALLER: ${{ secrets.DEVELOPER_ID_INSTALLER }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          chmod +x scripts/sign-and-notarize.sh
+          ./scripts/sign-and-notarize.sh
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/PodcastPilot.pkg
+            dist/PodcastPilot.pkg.sha256
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
